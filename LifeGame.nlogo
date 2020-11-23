@@ -8,6 +8,16 @@ to patch_render
   ifelse alive? [set pcolor green] [set pcolor black]
 end
 
+to patch_update
+  ifelse alive?
+  		[set alive? alive_neighbors = 2 or alive_neighbors = 3]
+  		[set alive? alive_neighbors = 3]
+end
+
+to patch_neighbors
+  set alive_neighbors count neighbors with [alive? = true]
+end
+
 
 to setup
   clear-all
@@ -19,15 +29,9 @@ end
 
 to go
   ; Get alive neighbors
-  ask patches [
-    set alive_neighbors count neighbors with [alive? = true]
-  ]
+  ask patches [patch_neighbors]
   ; Update patches status
-  ask patches [
-    ifelse alive?
-  		[if alive_neighbors < 2 or alive_neighbors > 3 [set alive? false]]
-  		[if alive_neighbors = 3 [set alive? true]]
-  ]
+  ask patches [patch_update]
   ; Render patches
   ask patches [patch_render]
   tick
@@ -41,11 +45,11 @@ end
 GRAPHICS-WINDOW
 209
 9
-617
-417
+668
+468
 -1
 -1
-8
+9
 1
 10
 1
